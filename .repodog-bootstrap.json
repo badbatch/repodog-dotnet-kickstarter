@@ -96,6 +96,14 @@
   ],
   "replacements": [
     {
+      "from": "badbatch/repodog-dotnet-kickstarter",
+      "to": "{{repository}}"
+    },
+    {
+      "from": "badbatch/repodog-nextjs-kickstarter",
+      "to": "{{owner}}/{{counterpartRepository}}"
+    },
+    {
       "from": "miami-man/repodog-dotnet-kickstarter",
       "to": "{{repository}}"
     },
@@ -174,5 +182,37 @@
       "to": "{{namespace}}.sln"
     }
   ],
-  "exclude": []
+  "exclude": [],
+  "whenMissing": {
+    "counterpartRepository": {
+      "exclude": [],
+      "fileReplacements": [
+        {
+          "file": ".github/workflows/validate.yml",
+          "from": "\n  e2e:\n    needs: validate\n    uses: miami-man/repodog-nextjs-kickstarter/.github/workflows/e2e.yml@main\n    with:\n      caller-repository: ${{ github.repository }}\n      caller-ref: ${{ github.sha }}\n      source-branch: ${{ github.head_ref }}\n      fallback-ref: ${{ vars.E2E_APP_FALLBACK_REF }}\n    secrets:\n      CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}\n",
+          "to": "\n"
+        },
+        {
+          "file": "README.md",
+          "from": "An opinionated ASP.NET Core API starter with Identity authentication, roles/policies, feature management, MediatR, FluentValidation, SQL Server, structured logging and integration tests. It works with [repodog-nextjs-kickstarter](https://github.com/badbatch/repodog-nextjs-kickstarter) through a shared endpoint contract, and can serve another frontend implementing that contract.",
+          "to": "An opinionated ASP.NET Core API starter with Identity authentication, roles/policies, feature management, MediatR, FluentValidation, SQL Server, structured logging and integration tests. It can serve any frontend implementing the documented endpoint contract."
+        },
+        {
+          "file": "README.md",
+          "from": "For the full browser-to-API path, place the Next.js starter beside this repository and run `pnpm test:e2e:docker` there. It builds both apps, provisions disposable accounts/database state and runs Playwright, then removes the stack.",
+          "to": "The backend integration tests run independently of a frontend. Add browser E2E in your consuming application when needed."
+        },
+        {
+          "file": "README.md",
+          "from": "## Integration with the Next.js kickstarter\n\nThe frontend uses generated clients from this API's OpenAPI document. Its credentials provider signs in here, then calls `/api/v1/users/me`. NextAuth stores API credentials in an encrypted HttpOnly session cookie and exposes only the public identity/access information to browser JavaScript. Authenticated Next.js BFF handlers attach the bearer token when forwarding requests here.\n\nSet the frontend's `KICKSTARTER_SERVER__API__BASE_URL` to the reachable API address. For development against Compose, that is normally `http://localhost:8080`; inside the paired E2E stack, the API service address is `http://api:8080`. The browser only needs the Next.js BFF URL, normally `/api`.\n\nAfter changing a backend contract, export `/openapi/v1.json` into the frontend's root `openapi.json` and run `pnpm generate` there. For policy changes, keep the API policy definition, current-user policy allowlist and frontend policy constant aligned. The API is the authority for access; UI/BFF checks provide earlier feedback and do not replace backend enforcement.\n\nThe BFF sends request and correlation IDs for structured logging. A session correlation ID groups activity while each browser request has its own request ID. A refreshed API identity also updates frontend roles/policies through `/users/me`.\n\n",
+          "to": "## Frontend integration\n\nA frontend signs in through `/api/v1/auth/login`, reads access information from `/api/v1/users/me` and refreshes tokens through `/api/v1/auth/refresh`. Prefer keeping API credentials behind a server-side frontend layer. Use the versioned OpenAPI document to generate clients, and keep policy names aligned with this API. The API independently enforces authorization. Send `X-Correlation-Id` and `X-Request-Id` to connect frontend activity with API logs.\n"
+        },
+        {
+          "file": "README.md",
+          "from": "## GitHub Actions\n\nThe PR workflow checks formatting, builds with warnings treated as errors and runs .NET tests/coverage. It then calls the reusable E2E workflow in the Next.js repository. The caller's merge commit is paired with the same source branch in the counterpart when present; otherwise `E2E_APP_FALLBACK_REF` selects the frontend fallback, or its default branch is discovered. Resolved commit SHAs are used for checkout.\n\nConfigure `CROSS_REPO_READ_TOKEN` with read-only Contents access to both repositories and allow reusable-workflow access from this repository. The frontend workflow must exist on the ref specified by the caller. Fork PRs do not receive repository secrets. Test reports and browser reports are uploaded as artifacts.\n\n",
+          "to": "## GitHub Actions\n\nThe PR workflow checks formatting, builds with compiler/analyzer warnings treated as errors, and runs tests and coverage. It does not depend on a frontend repository or a cross-repository token.\n"
+        }
+      ]
+    }
+  }
 }
