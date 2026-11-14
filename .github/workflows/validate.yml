@@ -1,0 +1,55 @@
+name: validate
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@v2
+      - name: Restore dependencies and tools
+        run: |
+          dotnet restore Kickstarter.sln
+          dotnet tool restore
+      - name: Check formatting
+        run: dotnet csharpier check .
+      - name: Build and check analyzers
+        run: dotnet build Kickstarter.sln --configuration Release --no-restore --warnaserror
+      - name: Run tests
+        run: >-
+          dotnet test Kickstarter.sln --configuration Release --no-build
+          --settings Coverage.runsettings --collect:"XPlat Code Coverage"
+          --logger trx --results-directory TestResults
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-test-results
+          path: TestResults/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  e2e:
+    needs: validate
+    uses: miami-man/repodog-nextjs-kickstarter/.github/workflows/e2e.yml@main
+    with:
+      caller-repository: ${{ github.repository }}
+      caller-ref: ${{ github.sha }}
+      source-branch: ${{ github.head_ref }}
+      fallback-ref: ${{ vars.E2E_APP_FALLBACK_REF }}
+    secrets:
+      CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}

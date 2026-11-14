@@ -1,0 +1,105 @@
+services:
+  api:
+    build: .
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__ApplicationDb: Server=db,1433;Database=ApplicationDb;User Id=sa;Password=${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in .env};Encrypt=True;TrustServerCertificate=True
+      BootstrapUser__Email: ${BOOTSTRAP_USER_EMAIL:-}
+      BootstrapUser__Password: ${BOOTSTRAP_USER_PASSWORD:-}
+      Email__Host: mailpit
+      Email__Port: 1025
+      Observability__OtlpEndpoint: ${OTLP_ENDPOINT:-}
+    ports:
+      - '8080:8080'
+    depends_on:
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in .env}
+    volumes:
+      - sql_data:/var/opt/mssql
+    healthcheck:
+      test: [CMD-SHELL, '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$$MSSQL_SA_PASSWORD" -Q "SELECT 1" -C -b']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  mailpit:
+        condition: service_started
+      otel-collector:
+    profiles: [observability]
+        condition: service_started
+
+  payment-simulator:
+    image: wiremock/wiremock:3.13.2
+    command: ["--global-response-templating", "--verbose"]
+    ports:
+      - "127.0.0.1:9090:8080"
+    volumes:
+      - ./dev/payment-simulator/mappings:/home/wiremock/mappings:ro
+      - ./dev/payment-simulator/__files:/home/wiremock/__files:ro
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:3.35.0
+    command: ["azurite-blob", "--blobHost", "0.0.0.0", "--blobPort", "10000", "--location", "/data"]
+    ports:
+      - "127.0.0.1:10000:10000"
+    volumes:
+      - azurite_data:/data
+
+  mailpit:
+    image: axllent/mailpit:v1.27.8
+    ports:
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:8025:8025"
+
+  loki:
+    profiles: [observability]
+    image: grafana/loki:3.7.0
+    command: ["-config.file=/etc/loki/config.yaml"]
+    ports:
+      - "127.0.0.1:3100:3100"
+    volumes:
+      - ./dev/observability/loki-config.yaml:/etc/loki/config.yaml:ro
+      - loki_data:/loki
+
+  otel-collector:
+    profiles: [observability]
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    ports:
+      - "127.0.0.1:4317:4317"
+      - "127.0.0.1:4318:4318"
+    volumes:
+      - ./dev/observability/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro
+    depends_on:
+      - loki
+
+  grafana:
+    profiles: [observability]
+    image: grafana/grafana:13.1.6
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in .env}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "127.0.0.1:3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./dev/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - loki
+
+volumes:
+  sql_data:
+  loki_data:
+  grafana_data:

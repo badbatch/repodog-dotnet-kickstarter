@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "files": [
+    ".config/dotnet-tools.json",
+    ".csharpierrc.json",
+    ".dockerignore",
+    ".editorconfig",
+    ".env.example",
+    ".github/workflows/validate.yml",
+    ".gitignore",
+    ".tool-versions",
+    "AGENTS.md",
+    "Coverage.runsettings",
+    "Directory.Build.props",
+    "Directory.Packages.props",
+    "Dockerfile",
+    "Kickstarter.sln",
+    "README.md",
+    "compose.yaml",
+    "coverage.sh",
+    "dev/observability/grafana/provisioning/datasources/loki.yaml",
+    "dev/observability/loki-config.yaml",
+    "dev/observability/otel-collector.yaml",
+    "src/Kickstarter.Api/Authorization/AuthorizationPolicies.cs",
+    "src/Kickstarter.Api/Authorization/CurrentUserResponseFactory.cs",
+    "src/Kickstarter.Api/Controllers/ApiControllerBase.cs",
+    "src/Kickstarter.Api/Controllers/ApplicationUsersController.cs",
+    "src/Kickstarter.Api/Controllers/AuthController.cs",
+    "src/Kickstarter.Api/Controllers/ExampleController.cs",
+    "src/Kickstarter.Api/Controllers/HealthController.cs",
+    "src/Kickstarter.Api/Kickstarter.Api.csproj",
+    "src/Kickstarter.Api/Program.cs",
+    "src/Kickstarter.Api/Startup/AuthorizeOperationFilter.cs",
+    "src/Kickstarter.Api/Startup/ConfigureSwaggerOptions.cs",
+    "src/Kickstarter.Api/Startup/RequestLogContextMiddleware.cs",
+    "src/Kickstarter.Api/Startup/UserBootstrapper.cs",
+    "src/Kickstarter.Api/appsettings.json",
+    "src/Kickstarter.Application/Contracts/Users/UserContracts.cs",
+    "src/Kickstarter.Application/Features/Health/Handlers/CheckDatabaseHealthHandler.cs",
+    "src/Kickstarter.Application/Features/Health/Queries/CheckDatabaseHealthQuery.cs",
+    "src/Kickstarter.Application/Features/Users/Commands/ForgotPasswordCommand.cs",
+    "src/Kickstarter.Application/Features/Users/Commands/LoginUserCommand.cs",
+    "src/Kickstarter.Application/Features/Users/Commands/RefreshUserTokenCommand.cs",
+    "src/Kickstarter.Application/Features/Users/Commands/RegisterUserCommand.cs",
+    "src/Kickstarter.Application/Features/Users/Commands/ResetPasswordCommand.cs",
+    "src/Kickstarter.Application/Features/Users/Handlers/ForgotPasswordHandler.cs",
+    "src/Kickstarter.Application/Features/Users/Handlers/GetCurrentUserHandler.cs",
+    "src/Kickstarter.Application/Features/Users/Handlers/LoginUserHandler.cs",
+    "src/Kickstarter.Application/Features/Users/Handlers/RefreshUserTokenHandler.cs",
+    "src/Kickstarter.Application/Features/Users/Handlers/RegisterUserHandler.cs",
+    "src/Kickstarter.Application/Features/Users/Handlers/ResetPasswordHandler.cs",
+    "src/Kickstarter.Application/Features/Users/Queries/GetCurrentUserQuery.cs",
+    "src/Kickstarter.Application/GlobalUsings.cs",
+    "src/Kickstarter.Application/Kickstarter.Application.csproj",
+    "src/Kickstarter.Application/Mapping/UserMappings.cs",
+    "src/Kickstarter.Application/Repositories/IApplicationUnitOfWork.cs",
+    "src/Kickstarter.Application/Results/PersistenceConflictException.cs",
+    "src/Kickstarter.Application/Results/ResultType.cs",
+    "src/Kickstarter.Application/Results/ServiceResult.cs",
+    "src/Kickstarter.Application/Users/AccountRecoveryOptions.cs",
+    "src/Kickstarter.Application/Users/IEmailSender.cs",
+    "src/Kickstarter.Application/Users/IIdentityRepository.cs",
+    "src/Kickstarter.Application/Validation/Users/ForgotPasswordRequestValidator.cs",
+    "src/Kickstarter.Application/Validation/Users/LoginRequestValidator.cs",
+    "src/Kickstarter.Application/Validation/Users/RefreshTokenRequestValidator.cs",
+    "src/Kickstarter.Application/Validation/Users/RegisterRequestValidator.cs",
+    "src/Kickstarter.Application/Validation/Users/ResetPasswordRequestValidator.cs",
+    "src/Kickstarter.Domain/Entities/ApplicationUser.cs",
+    "src/Kickstarter.Domain/Kickstarter.Domain.csproj",
+    "src/Kickstarter.Infrastructure/Data/ApplicationDbContext.cs",
+    "src/Kickstarter.Infrastructure/Data/ApplicationUnitOfWork.cs",
+    "src/Kickstarter.Infrastructure/Kickstarter.Infrastructure.csproj",
+    "src/Kickstarter.Infrastructure/Users/IdentityRepository.cs",
+    "src/Kickstarter.Infrastructure/Users/SmtpEmailOptions.cs",
+    "src/Kickstarter.Infrastructure/Users/SmtpEmailSender.cs",
+    "tests/Kickstarter.IntegrationTests/AccountRecoveryIntegrationTests.cs",
+    "tests/Kickstarter.IntegrationTests/AssemblyInfo.cs",
+    "tests/Kickstarter.IntegrationTests/AuthorizationPolicyTests.cs",
+    "tests/Kickstarter.IntegrationTests/CurrentUserAccessIntegrationTests.cs",
+    "tests/Kickstarter.IntegrationTests/IdentityAndHealthIntegrationTests.cs",
+    "tests/Kickstarter.IntegrationTests/Kickstarter.IntegrationTests.csproj",
+    "tests/Kickstarter.IntegrationTests/Setup/BaseJsonOptions.cs",
+    "tests/Kickstarter.IntegrationTests/Setup/BaseTest.cs",
+    "tests/Kickstarter.IntegrationTests/Setup/CustomWebApplicationFactory.cs",
+    "tests/Kickstarter.IntegrationTests/Setup/HttpClientExtensions.cs",
+    "tests/Kickstarter.IntegrationTests/Setup/IntegrationTestAuthentication.cs",
+    "tests/Kickstarter.IntegrationTests/Setup/IntegrationTestHostBuilder.cs",
+    "tests/Kickstarter.TestCommon/Faker/Builders/Dto/FakeLoginRequest.cs",
+    "tests/Kickstarter.TestCommon/Faker/Builders/Dto/FakeRegisterRequest.cs",
+    "tests/Kickstarter.TestCommon/Faker/Builders/Dto/FakeUserResponse.cs",
+    "tests/Kickstarter.TestCommon/Faker/Builders/Entity/FakeApplicationUser.cs",
+    "tests/Kickstarter.TestCommon/Fixtures/SqlServerFixture.cs",
+    "tests/Kickstarter.TestCommon/Kickstarter.TestCommon.csproj",
+    "tests/Kickstarter.TestCommon/TestTime.cs",
+    "validate.sh"
+  ],
+  "replacements": [
+    {
+      "from": "miami-man/repodog-dotnet-kickstarter",
+      "to": "{{repository}}"
+    },
+    {
+      "from": "miami-man/repodog-nextjs-kickstarter",
+      "to": "{{owner}}/{{counterpartRepository}}"
+    },
+    {
+      "from": "repodog-dotnet-kickstarter",
+      "to": "{{name}}"
+    },
+    {
+      "from": "repodog-nextjs-kickstarter",
+      "to": "{{counterpartRepository}}"
+    },
+    {
+      "from": "Repodog .NET Kickstarter",
+      "to": "{{name}}"
+    },
+    {
+      "from": "Kickstarter",
+      "to": "{{namespace}}"
+    }
+  ],
+  "renamePaths": [
+    {
+      "from": "src/Kickstarter.Api/Kickstarter.Api.csproj",
+      "to": "src/Kickstarter.Api/{{namespace}}.Api.csproj"
+    },
+    {
+      "from": "src/Kickstarter.Application/Kickstarter.Application.csproj",
+      "to": "src/Kickstarter.Application/{{namespace}}.Application.csproj"
+    },
+    {
+      "from": "src/Kickstarter.Domain/Kickstarter.Domain.csproj",
+      "to": "src/Kickstarter.Domain/{{namespace}}.Domain.csproj"
+    },
+    {
+      "from": "src/Kickstarter.Infrastructure/Kickstarter.Infrastructure.csproj",
+      "to": "src/Kickstarter.Infrastructure/{{namespace}}.Infrastructure.csproj"
+    },
+    {
+      "from": "tests/Kickstarter.IntegrationTests/Kickstarter.IntegrationTests.csproj",
+      "to": "tests/Kickstarter.IntegrationTests/{{namespace}}.IntegrationTests.csproj"
+    },
+    {
+      "from": "tests/Kickstarter.TestCommon/Kickstarter.TestCommon.csproj",
+      "to": "tests/Kickstarter.TestCommon/{{namespace}}.TestCommon.csproj"
+    },
+    {
+      "from": "src/Kickstarter.Api",
+      "to": "src/{{namespace}}.Api"
+    },
+    {
+      "from": "src/Kickstarter.Application",
+      "to": "src/{{namespace}}.Application"
+    },
+    {
+      "from": "src/Kickstarter.Domain",
+      "to": "src/{{namespace}}.Domain"
+    },
+    {
+      "from": "src/Kickstarter.Infrastructure",
+      "to": "src/{{namespace}}.Infrastructure"
+    },
+    {
+      "from": "tests/Kickstarter.IntegrationTests",
+      "to": "tests/{{namespace}}.IntegrationTests"
+    },
+    {
+      "from": "tests/Kickstarter.TestCommon",
+      "to": "tests/{{namespace}}.TestCommon"
+    },
+    {
+      "from": "Kickstarter.sln",
+      "to": "{{namespace}}.sln"
+    }
+  ],
+  "exclude": []
+}

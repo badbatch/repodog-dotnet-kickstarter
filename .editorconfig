@@ -1,0 +1,513 @@
+root = true
+
+# General text formatting and file conventions.
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.cs]
+
+# C# indentation, whitespace, line endings, and braces.
+indent_style = space
+indent_size = 4
+tab_width = 4
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+dotnet_style_allow_trailing_comma = true:suggestion
+
+# =====================================================================
+# ROSLYNATOR CONFIGURATION
+#
+# Intended for ordinary C# applications and libraries.
+# Works with Roslynator.Analyzers in Rider on macOS, Windows and Linux.
+#
+# Severity:
+#   warning    = Report as a warning.
+#   suggestion = Suggest an improvement.
+#   none       = Disable a diagnostic.
+#
+# IMPORTANT:
+#   A severity setting does not install an analyzer.
+#   Some diagnostics are disabled by default or require configuration.
+#   Verify enabled diagnostics against the installed package version.
+# =====================================================================
+
+
+# =====================================================================
+# 1. METHOD AND MEMBER NAMING
+# =====================================================================
+
+# RCS1046: Require asynchronous method names to end with Async.
+# This analyzer is disabled by default, so explicitly configure severity.
+dotnet_diagnostic.RCS1046.severity = warning
+
+# RCS1047: Avoid the Async suffix on methods that are not asynchronous.
+# Review exceptions for framework-required method names.
+dotnet_diagnostic.RCS1047.severity = warning
+
+
+# =====================================================================
+# 2. PATTERN MATCHING AND TYPE CHECKS
+# =====================================================================
+
+# RCS1172: Prefer the is operator over as when checking an object's type.
+dotnet_diagnostic.RCS1172.severity = suggestion
+
+# RCS1220: Prefer pattern matching over a type check followed by a cast.
+dotnet_diagnostic.RCS1220.severity = suggestion
+
+# RCS1221: Prefer pattern matching over an as expression followed by a null check.
+dotnet_diagnostic.RCS1221.severity = suggestion
+
+# RCS1248: Normalize null-check syntax.
+# Requires roslynator_null_check_style to be configured.
+# Choose pattern_matching to prefer x is null / x is not null.
+roslynator_null_check_style = pattern_matching
+dotnet_diagnostic.RCS1248.severity = suggestion
+
+
+# =====================================================================
+# 3. BRACES AND CONTROL FLOW
+# Preserve braces, including around single-line statements.
+# =====================================================================
+
+# RCS1001: Add braces when an embedded statement spans multiple lines.
+dotnet_diagnostic.RCS1001.severity = warning
+
+# RCS1002: Disable the rule that removes braces from embedded statements.
+dotnet_diagnostic.RCS1002.severity = none
+
+# RCS1003: Add braces to multiline if-else statements.
+dotnet_diagnostic.RCS1003.severity = warning
+
+# RCS1004: Disable the rule that removes braces from if-else statements.
+dotnet_diagnostic.RCS1004.severity = none
+
+# RCS1007: Add braces to applicable statements.
+dotnet_diagnostic.RCS1007.severity = warning
+
+# RCS1006: Disable merging else with a nested if when it could obscure
+# the project's preferred control-flow layout.
+dotnet_diagnostic.RCS1006.severity = none
+
+# RCS1031: Disable removing braces from switch sections.
+dotnet_diagnostic.RCS1031.severity = none
+
+# RCS1208: Reduce unnecessary nesting of if statements.
+# Review suggested changes to preserve readability.
+dotnet_diagnostic.RCS1208.severity = none
+
+# RCS1211: Disable removing unnecessary else blocks if the explicit
+# else structure is preferred by the project.
+dotnet_diagnostic.RCS1211.severity = none
+
+
+# =====================================================================
+# 4. NULL HANDLING AND ARGUMENT VALIDATION
+# =====================================================================
+
+# RCS1199: Identify unnecessary null checks.
+dotnet_diagnostic.RCS1199.severity = suggestion
+
+# RCS1202: Avoid potential NullReferenceException scenarios.
+dotnet_diagnostic.RCS1202.severity = warning
+
+# RCS1227: Validate arguments correctly.
+dotnet_diagnostic.RCS1227.severity = warning
+
+# RCS1249: Identify unnecessary null-forgiving operators.
+dotnet_diagnostic.RCS1249.severity = warning
+
+# RCS1255: Simplify argument null checks.
+dotnet_diagnostic.RCS1255.severity = suggestion
+
+# RCS1256: Report invalid argument null checks.
+dotnet_diagnostic.RCS1256.severity = warning
+
+
+# =====================================================================
+# 5. CODE SIMPLIFICATION AND REDUNDANT SYNTAX
+# =====================================================================
+
+# RCS1013: Prefer predefined type keywords such as int over Int32.
+dotnet_diagnostic.RCS1013.severity = suggestion
+
+# RCS1015: Use nameof instead of a hard-coded symbol name.
+dotnet_diagnostic.RCS1015.severity = warning
+
+# RCS1020: Simplify Nullable<T> to T? where appropriate.
+dotnet_diagnostic.RCS1020.severity = suggestion
+
+# RCS1032: Remove redundant parentheses.
+dotnet_diagnostic.RCS1032.severity = suggestion
+
+# RCS1033: Remove redundant Boolean literals.
+dotnet_diagnostic.RCS1033.severity = suggestion
+
+# RCS1049: Simplify Boolean comparisons.
+dotnet_diagnostic.RCS1049.severity = suggestion
+
+# RCS1058: Prefer compound assignment where appropriate.
+dotnet_diagnostic.RCS1058.severity = suggestion
+
+# RCS1068: Simplify logical negation.
+dotnet_diagnostic.RCS1068.severity = suggestion
+
+# RCS1143: Simplify null-coalescing expressions.
+dotnet_diagnostic.RCS1143.severity = suggestion
+
+# RCS1145: Remove redundant as operators.
+dotnet_diagnostic.RCS1145.severity = suggestion
+
+# RCS1146: Prefer conditional access where appropriate.
+dotnet_diagnostic.RCS1146.severity = suggestion
+
+# RCS1151: Remove redundant casts.
+dotnet_diagnostic.RCS1151.severity = suggestion
+
+# RCS1212: Remove redundant assignments.
+dotnet_diagnostic.RCS1212.severity = suggestion
+
+# RCS1218: Simplify code branching.
+dotnet_diagnostic.RCS1218.severity = suggestion
+
+# RCS1244: Simplify default expressions.
+dotnet_diagnostic.RCS1244.severity = suggestion
+
+# RCS1259: Remove empty syntax where appropriate.
+dotnet_diagnostic.RCS1259.severity = suggestion
+
+
+# =====================================================================
+# 6. MODERN C# LANGUAGE FEATURES
+# =====================================================================
+
+# RCS1014: Configure explicit or implicit array typing consistently.
+dotnet_diagnostic.RCS1014.severity = suggestion
+
+# RCS1016: Choose a consistent block-body or expression-body style.
+dotnet_diagnostic.RCS1016.severity = suggestion
+
+# RCS1050: Configure the preferred object-creation syntax.
+dotnet_diagnostic.RCS1050.severity = suggestion
+
+# RCS1195: Prefer the index-from-end operator where appropriate.
+dotnet_diagnostic.RCS1195.severity = suggestion
+
+# RCS1220: Prefer pattern matching instead of a type check and cast.
+dotnet_diagnostic.RCS1220.severity = suggestion
+
+# RCS1221: Prefer pattern matching instead of an as expression and null check.
+dotnet_diagnostic.RCS1221.severity = suggestion
+
+# RCS1246: Prefer element access when the analyzer identifies an equivalent.
+dotnet_diagnostic.RCS1246.severity = suggestion
+
+# RCS1250: Configure implicit versus explicit object creation.
+# This analyzer requires roslynator_object_creation_type_style.
+# Configure that option before enabling this diagnostic.
+# dotnet_diagnostic.RCS1250.severity = suggestion
+
+# RCS1262: Avoid raw string literals when an ordinary string is clearer.
+dotnet_diagnostic.RCS1262.severity = suggestion
+
+# RCS1266: Prefer raw string literals where appropriate.
+dotnet_diagnostic.RCS1266.severity = suggestion
+
+# RCS1268: Simplify numeric comparisons.
+dotnet_diagnostic.RCS1268.severity = suggestion
+
+
+# =====================================================================
+# 7. ASYNCHRONOUS PROGRAMMING AND TASKS
+# =====================================================================
+
+# RCS1046: Require Async suffixes on asynchronous method names.
+dotnet_diagnostic.RCS1046.severity = warning
+
+# RCS1047: Discourage Async suffixes on non-asynchronous methods.
+dotnet_diagnostic.RCS1047.severity = suggestion
+
+# RCS1174: Remove redundant async/await where appropriate.
+# Check package support and enablement before relying on this rule.
+dotnet_diagnostic.RCS1174.severity = suggestion
+
+# RCS1210: Return a completed task instead of null.
+dotnet_diagnostic.RCS1210.severity = warning
+
+# RCS1229: Use async/await when necessary.
+dotnet_diagnostic.RCS1229.severity = suggestion
+
+# RCS1261: Use asynchronous disposal when a resource supports it.
+dotnet_diagnostic.RCS1261.severity = suggestion
+
+
+# =====================================================================
+# 8. EXCEPTION HANDLING AND RELIABILITY
+# =====================================================================
+
+# RCS1044: Avoid throwing the original exception in a way that
+# loses its stack trace. Use throw; when rethrowing the same exception.
+dotnet_diagnostic.RCS1044.severity = warning
+
+# RCS1059: Avoid locking on publicly accessible instances.
+dotnet_diagnostic.RCS1059.severity = warning
+
+# RCS1157: Detect enum values containing undefined flags.
+dotnet_diagnostic.RCS1157.severity = warning
+
+# RCS1193: Preserve the params modifier when overriding a member.
+dotnet_diagnostic.RCS1193.severity = warning
+
+# RCS1194: Implement the recommended constructors for exception types.
+dotnet_diagnostic.RCS1194.severity = warning
+
+# RCS1215: Report expressions that are always true or always false.
+dotnet_diagnostic.RCS1215.severity = warning
+
+# RCS1234: Report duplicate enum values.
+dotnet_diagnostic.RCS1234.severity = warning
+
+# RCS1236: Prefer exception filters where appropriate.
+dotnet_diagnostic.RCS1236.severity = suggestion
+
+# RCS1265: Remove redundant catch blocks.
+dotnet_diagnostic.RCS1265.severity = suggestion
+
+
+# =====================================================================
+# 9. PERFORMANCE AND ALLOCATIONS
+# =====================================================================
+
+# RCS1077: Optimize applicable LINQ method calls.
+dotnet_diagnostic.RCS1077.severity = suggestion
+
+# RCS1186: Prefer a Regex instance instead of repeated static calls
+# when the analyzer identifies a suitable case.
+dotnet_diagnostic.RCS1186.severity = suggestion
+
+# RCS1197: Optimize StringBuilder.Append and AppendLine calls.
+dotnet_diagnostic.RCS1197.severity = suggestion
+
+# RCS1198: Avoid unnecessary boxing of value types.
+dotnet_diagnostic.RCS1198.severity = warning
+
+# RCS1200: Use ThenBy instead of OrderBy for secondary ordering.
+dotnet_diagnostic.RCS1200.severity = suggestion
+
+# RCS1230: Avoid unnecessary explicit enumerator usage.
+dotnet_diagnostic.RCS1230.severity = suggestion
+
+# RCS1235: Optimize method calls where an equivalent is available.
+dotnet_diagnostic.RCS1235.severity = suggestion
+
+
+# =====================================================================
+# 10. STRING HANDLING AND CULTURE-SENSITIVE COMPARISONS
+# =====================================================================
+
+# RCS1155: Specify StringComparison when comparing strings.
+# Choose Ordinal or OrdinalIgnoreCase for non-linguistic comparisons.
+dotnet_diagnostic.RCS1155.severity = warning
+
+# RCS1156: Use string.Length instead of comparing with an empty string.
+dotnet_diagnostic.RCS1156.severity = suggestion
+
+# RCS1190: Join string expressions where appropriate.
+dotnet_diagnostic.RCS1190.severity = suggestion
+
+# RCS1192: Avoid unnecessary verbatim string literals.
+dotnet_diagnostic.RCS1192.severity = suggestion
+
+# RCS1197: Optimize StringBuilder.Append and AppendLine calls.
+dotnet_diagnostic.RCS1197.severity = suggestion
+
+# RCS1214: Remove unnecessary interpolated strings.
+dotnet_diagnostic.RCS1214.severity = suggestion
+
+# RCS1217: Convert interpolated strings to concatenation where appropriate.
+dotnet_diagnostic.RCS1217.severity = suggestion
+
+# RCS1267: Prefer interpolation over string.Concat where appropriate.
+dotnet_diagnostic.RCS1267.severity = suggestion
+
+
+# =====================================================================
+# 11. API AND TYPE DESIGN
+# =====================================================================
+
+# RCS1018: Configure whether accessibility modifiers should be explicit.
+dotnet_diagnostic.RCS1018.severity = suggestion
+
+# RCS1019: Order modifiers consistently.
+dotnet_diagnostic.RCS1019.severity = suggestion
+
+# RCS1060: Declare each type in a separate file.
+dotnet_diagnostic.RCS1060.severity = none
+
+# RCS1158: Use a type parameter in static members of generic types
+# where appropriate.
+dotnet_diagnostic.RCS1158.severity = suggestion
+
+# RCS1159: Prefer EventHandler<T> for event declarations.
+dotnet_diagnostic.RCS1159.severity = suggestion
+
+# RCS1160: Avoid public constructors on abstract types.
+dotnet_diagnostic.RCS1160.severity = warning
+
+# RCS1169: Make fields readonly when they are assigned only during initialization.
+dotnet_diagnostic.RCS1169.severity = suggestion
+
+# RCS1170: Use readonly auto-implemented properties where appropriate.
+dotnet_diagnostic.RCS1170.severity = suggestion
+
+# RCS1182: Remove redundant base interfaces.
+dotnet_diagnostic.RCS1182.severity = suggestion
+
+# RCS1225: Seal classes when inheritance is not intended.
+# Review public API and framework extension points before applying.
+dotnet_diagnostic.RCS1225.severity = suggestion
+
+# RCS1224: Make a method an extension method where appropriate.
+dotnet_diagnostic.RCS1224.severity = suggestion
+
+# RCS1241: Implement a non-generic counterpart where appropriate.
+dotnet_diagnostic.RCS1241.severity = suggestion
+
+
+# =====================================================================
+# 12. RESOURCE MANAGEMENT
+# =====================================================================
+
+# RCS1005: Simplify nested using statements.
+dotnet_diagnostic.RCS1005.severity = suggestion
+
+# RCS1261: Use asynchronous disposal when supported.
+dotnet_diagnostic.RCS1261.severity = suggestion
+
+
+# =====================================================================
+# 13. LINQ AND COLLECTIONS
+# =====================================================================
+
+# RCS1077: Optimize LINQ calls when a simpler equivalent exists.
+dotnet_diagnostic.RCS1077.severity = suggestion
+
+# RCS1200: Use ThenBy rather than OrderBy for secondary ordering.
+dotnet_diagnostic.RCS1200.severity = suggestion
+
+# RCS1230: Avoid unnecessary explicit enumerator usage.
+dotnet_diagnostic.RCS1230.severity = suggestion
+
+# RCS1246: Prefer element access when equivalent and appropriate.
+dotnet_diagnostic.RCS1246.severity = suggestion
+
+
+# =====================================================================
+# 14. BOOLEAN EXPRESSIONS AND OPERATORS
+# =====================================================================
+
+# RCS1049: Simplify Boolean comparisons.
+dotnet_diagnostic.RCS1049.severity = suggestion
+
+# RCS1068: Simplify logical negation.
+dotnet_diagnostic.RCS1068.severity = suggestion
+
+# RCS1233: Prefer short-circuiting operators where appropriate.
+dotnet_diagnostic.RCS1233.severity = suggestion
+
+# RCS1268: Simplify numeric comparisons.
+dotnet_diagnostic.RCS1268.severity = suggestion
+
+
+# =====================================================================
+# 15. XML DOCUMENTATION
+# =====================================================================
+
+# RCS1226: Add paragraphs to documentation comments where appropriate.
+dotnet_diagnostic.RCS1226.severity = suggestion
+
+# RCS1228: Remove unused elements from documentation comments.
+dotnet_diagnostic.RCS1228.severity = suggestion
+
+# RCS1232: Order XML documentation elements consistently.
+dotnet_diagnostic.RCS1232.severity = suggestion
+
+# RCS1243: Remove duplicate words from comments.
+dotnet_diagnostic.RCS1243.severity = suggestion
+
+# RCS1247: Correct XML documentation comment tags.
+dotnet_diagnostic.RCS1247.severity = suggestion
+
+# RCS1253: Format XML documentation summaries.
+dotnet_diagnostic.RCS1253.severity = suggestion
+
+# RCS1263: Correct invalid references in documentation comments.
+dotnet_diagnostic.RCS1263.severity = warning
+
+
+# =====================================================================
+# 17. CODE STRUCTURE AND MAINTAINABILITY
+# =====================================================================
+
+# RCS1043: Remove partial from a type that has only one declaration.
+dotnet_diagnostic.RCS1043.severity = suggestion
+
+# RCS1061: Merge nested if statements where appropriate.
+dotnet_diagnostic.RCS1061.severity = suggestion
+
+# RCS1162: Avoid chains of assignments.
+dotnet_diagnostic.RCS1162.severity = suggestion
+
+# RCS1163: Remove unused parameters where API compatibility permits.
+dotnet_diagnostic.RCS1163.severity = suggestion
+
+# RCS1164: Remove unused generic type parameters where appropriate.
+dotnet_diagnostic.RCS1164.severity = suggestion
+
+# RCS1213: Remove unused member declarations when safe.
+dotnet_diagnostic.RCS1213.severity = suggestion
+
+# RCS1218: Simplify branching.
+dotnet_diagnostic.RCS1218.severity = suggestion
+
+
+# =====================================================================
+# 18. LANGUAGE AND FRAMEWORK COMPATIBILITY
+# Only use syntax supported by the project's configured language version.
+# =====================================================================
+
+# RCS1014: Configure explicit or implicit array typing.
+dotnet_diagnostic.RCS1014.severity = suggestion
+
+# RCS1020: Simplify nullable value type syntax.
+dotnet_diagnostic.RCS1020.severity = suggestion
+
+# RCS1195: Prefer the index-from-end operator when supported.
+dotnet_diagnostic.RCS1195.severity = suggestion
+
+# RCS1250: Configure target-typed object creation.
+# Requires roslynator_object_creation_type_style.
+# dotnet_diagnostic.RCS1250.severity = suggestion
+
+# RCS1262: Prefer ordinary strings over raw strings when appropriate.
+dotnet_diagnostic.RCS1262.severity = suggestion
+
+# RCS1266: Prefer raw strings when they improve readability.
+dotnet_diagnostic.RCS1266.severity = suggestion
+
+
+# =====================================================================
+# OVERRIDES
+# =====================================================================
+
+# Evaluation of this argument may be expensive and unnecessary if logging is disabled
+dotnet_diagnostic.CA1873.severity = none
+
+# Unused route parameter
+dotnet_diagnostic.ASP0018.severity = none
+
+# Test method names intentionally use the repository's Given_When_Then convention
+[**/*Tests.cs]
+dotnet_diagnostic.RCS1046.severity = none

@@ -1,0 +1,9 @@
+<Project>
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
+    </ItemGroup>
+</Project>

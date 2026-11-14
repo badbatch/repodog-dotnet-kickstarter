@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Bogus" />
+        <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
+        <PackageReference Include="Testcontainers.MsSql" />
+        <PackageReference Include="xunit.v3.extensibility.core" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../../src/Kickstarter.Application/Kickstarter.Application.csproj" />
+        <ProjectReference Include="../../src/Kickstarter.Domain/Kickstarter.Domain.csproj" />
+        <ProjectReference Include="../../src/Kickstarter.Infrastructure/Kickstarter.Infrastructure.csproj" />
+    </ItemGroup>
+</Project>
