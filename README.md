@@ -4,7 +4,7 @@ An opinionated ASP.NET Core API starter with Identity authentication, roles/poli
 
 ## Install
 
-Install the .NET SDK from `.tool-versions` with mise. Docker is needed for local SQL Server and the integration-test database containers.
+Install the .NET SDK from `.tool-versions` with [mise](https://mise.jdx.dev/getting-started.html). Docker is needed for local SQL Server and the integration-test database containers.
 
 ```sh
 mise install
@@ -13,7 +13,15 @@ dotnet restore Kickstarter.sln
 cp .env.example .env
 ```
 
-Set `MSSQL_SA_PASSWORD` and `GRAFANA_ADMIN_PASSWORD` in `.env`. Compose interpolates the Grafana password even when the observability profile is disabled. Optionally set `BOOTSTRAP_USER_EMAIL` and `BOOTSTRAP_USER_PASSWORD` to seed a privileged example account. Do not copy credentials into application source.
+The local Docker setup includes SQL Server for application data and Mailpit for viewing development emails. It also offers an optional log-viewing stack: an OpenTelemetry collector forwards API logs to Loki for storage, and Grafana provides a browser interface for searching them. Those three logging services only start when you enable the `observability` profile; the API logs to the console without them.
+
+Configure `.env` before starting Compose:
+
+- `MSSQL_SA_PASSWORD`: the SQL Server administrator password.
+- `GRAFANA_ADMIN_PASSWORD`: the password for Grafana's local administrator account. The current Compose file requires this value even when the optional logging services are disabled, because variable interpolation happens before profile selection. Setting it does not start Grafana.
+- Optionally set `BOOTSTRAP_USER_EMAIL` and `BOOTSTRAP_USER_PASSWORD` to seed a privileged example account.
+
+Do not copy credentials into application source. See [Logging and observability](#logging-and-observability) for how to start and use the optional logging services.
 
 ## Run
 
@@ -63,7 +71,13 @@ For the full browser-to-API path, place the Next.js starter beside this reposito
 | `tests/Kickstarter.TestCommon`       | Shared application/database fixtures, builders and test support.                                                |
 | `tests/Kickstarter.IntegrationTests` | HTTP/database/auth integration scenarios.                                                                       |
 
-Feature code is grouped under `Application/Features/<Feature>/Commands`, `Queries` and `Handlers`. API contracts live under `Application/Contracts`, validators under `Application/Validation`, and persistence/service implementations in Infrastructure. Controllers translate HTTP requests to application requests and map application results back to HTTP.
+Within `src/Kickstarter.Application`, code is organized into:
+
+- `Features/<Feature>/Commands/`, `Features/<Feature>/Queries/` and `Features/<Feature>/Handlers/` for application operations.
+- `Contracts/<Feature>/` for HTTP request and response contracts.
+- `Validation/<Feature>/` for request validators.
+
+Persistence and service implementations live in `src/Kickstarter.Infrastructure`. Controllers validate HTTP requests, dispatch application commands or queries through MediatR, and map the results back to HTTP responses.
 
 Keep cancellation asynchronous and propagate cancellation tokens where supported. Prefer injected `TimeProvider` for time-dependent behavior so tests can control time. Central package versions live in `Directory.Packages.props`; nullable reference types and Roslynator are configured centrally. CSharpier supplies consistent formatting.
 
@@ -132,9 +146,10 @@ var result = await mediator.Send(
     new RegisterUserCommand(request.Email, request.Password, request.UserName),
     cancellationToken
 );
+
 ```
 
-The handler performs application work through `IIdentityRepository`; Infrastructure supplies its implementation. `ServiceResult<T>` carries success/created/no-content, validation, authentication/authorization, not-found, conflict, unavailable and failure outcomes. `ApiControllerBase` maps those outcomes to typed HTTP responses. Follow the user/health features when adding a new application operation. The minimal `ExampleController` returns directly because its purpose is to illustrate authorization, not an application workflow.
+Handlers perform application work through interfaces implemented by Infrastructure and return ServiceResult<T> outcomes that controllers map to typed HTTP responses using ApiControllerBase; follow the user and health features for this pattern, while ExampleController demonstrates authorization directly without MediatR.
 
 FluentValidation validators are discovered from the Application assembly. Controllers explicitly call `ValidateAsync` before sending requests through MediatR. Validation is not an automatically installed mediator pipeline, so adding a validator alone does not execute it for a new endpoint. Add the validator dependency and validation call, then write integration cases for invalid input and expected HTTP results.
 
@@ -176,7 +191,29 @@ Serilog reads configured levels, enriches from log context, writes to the consol
 
 Identifiers are bounded and checked before entering the log scope. Add useful route keys through `RequestLogging:RouteValueProperties`. `Feature` is a log label, not a feature-management toggle.
 
-Set `Observability:OtlpEndpoint` to enable the OpenTelemetry log sink. The optional Compose observability profile supplies an OpenTelemetry collector, Loki and Grafana; set `OTLP_ENDPOINT=http://otel-collector:4318` and use `docker compose --profile observability up --build`. This wiring exports logs; it does not install a complete tracing/metrics instrumentation pipeline.
+Console logging is enabled without any additional services. For a searchable local log history, the optional Compose `observability` profile adds:
+
+- **OpenTelemetry collector**: receives API logs over OTLP and forwards them to Loki.
+- **Loki**: stores the logs.
+- **Grafana**: provides the browser interface for exploring the logs, with the Loki data source already configured.
+
+To enable it, set these values in `.env`:
+
+```dotenv
+OTLP_ENDPOINT=http://otel-collector:4318
+GRAFANA_ADMIN_USER=admin
+GRAFANA_ADMIN_PASSWORD=your-local-grafana-password
+```
+
+Then start the application and logging services together:
+
+```sh
+docker compose --profile observability up --build
+```
+
+Open Grafana at <http://localhost:3001> and sign in with `GRAFANA_ADMIN_USER` and `GRAFANA_ADMIN_PASSWORD`. Make an API request, then open Grafana's Explore view and select the provisioned **Loki** data source to find its logs. The collector and Loki run within Compose; the API sends logs to the collector's service address, not Grafana's browser address.
+
+Compose maps `OTLP_ENDPOINT` into the API's `Observability:OtlpEndpoint` setting, which enables the OpenTelemetry log sink. Leave `OTLP_ENDPOINT` empty for console-only logging with the default `docker compose up --build` command. This wiring exports logs; it does not install a complete tracing/metrics instrumentation pipeline.
 
 ## Integration with the Next.js kickstarter
 
