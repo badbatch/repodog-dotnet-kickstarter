@@ -45,7 +45,7 @@ jobs:
 
   e2e:
     needs: validate
-    uses: miami-man/repodog-nextjs-kickstarter/.github/workflows/e2e.yml@main
+    uses: badbatch/repodog-nextjs-kickstarter/.github/workflows/e2e.yml@main
     with:
       caller-repository: ${{ github.repository }}
       caller-ref: ${{ github.sha }}

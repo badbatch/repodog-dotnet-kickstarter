@@ -189,7 +189,7 @@
       "fileReplacements": [
         {
           "file": ".github/workflows/validate.yml",
-          "from": "\n  e2e:\n    needs: validate\n    uses: miami-man/repodog-nextjs-kickstarter/.github/workflows/e2e.yml@main\n    with:\n      caller-repository: ${{ github.repository }}\n      caller-ref: ${{ github.sha }}\n      source-branch: ${{ github.head_ref }}\n      fallback-ref: ${{ vars.E2E_APP_FALLBACK_REF }}\n    secrets:\n      CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}\n",
+          "from": "\n  e2e:\n    needs: validate\n    uses: badbatch/repodog-nextjs-kickstarter/.github/workflows/e2e.yml@main\n    with:\n      caller-repository: ${{ github.repository }}\n      caller-ref: ${{ github.sha }}\n      source-branch: ${{ github.head_ref }}\n      fallback-ref: ${{ vars.E2E_APP_FALLBACK_REF }}\n    secrets:\n      CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}\n",
           "to": "\n"
         },
         {
